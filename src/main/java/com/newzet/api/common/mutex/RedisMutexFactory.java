@@ -2,8 +2,6 @@ package com.newzet.api.common.mutex;
 
 import org.springframework.stereotype.Component;
 
-import com.newzet.api.common.cache.redis.RedisUtil;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +14,7 @@ public class RedisMutexFactory implements MutexFactory{
 	private static final String MUTEX_PREFIX = "mutex:";
 	private static final String MUTEX_VALUE = "locked";
 
-	private final RedisUtil redisUtil;
+	private final MutexUtil mutexUtil;
 
 	@Override
 	public void tryMutex(String key, long waitTime, long leaseTime) {
@@ -24,7 +22,7 @@ public class RedisMutexFactory implements MutexFactory{
 		long endTime = startTime + waitTime;
 
 		while (System.currentTimeMillis() < endTime) {
-			boolean acquired = redisUtil.setMutex(MUTEX_PREFIX + key, MUTEX_VALUE, leaseTime);
+			boolean acquired = mutexUtil.setMutex(MUTEX_PREFIX + key, MUTEX_VALUE, leaseTime);
 			if (acquired) return;
 
 			try {
@@ -38,7 +36,7 @@ public class RedisMutexFactory implements MutexFactory{
 
 	@Override
 	public void release(String key) {
-		redisUtil.delete(MUTEX_PREFIX + key);
+		mutexUtil.delete(MUTEX_PREFIX + key);
 	}
 }
 

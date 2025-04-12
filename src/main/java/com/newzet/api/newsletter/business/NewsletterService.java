@@ -31,8 +31,8 @@ public class NewsletterService {
 			.orElseGet(() ->
 				distributedRequestMerger.merge(
 					NEWSLETTER_DOMAIN_PREFIX + domain, MUTEX_WAIT_TIME, MUTEX_LEASE_TIME,
-					() -> {return findOrCreateNewsletter(name, domain, mailingList);},
-					() -> {return findOrCreateNewsletter(name, domain, mailingList);})
+					() -> findOrCreateByDomainOrMailingListInDatabase(name, domain, mailingList),
+					() -> findOrCreateByDomainOrMailingListInDatabase(name, domain, mailingList))
 				);
 	}
 

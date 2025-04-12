@@ -1,4 +1,4 @@
-package com.newzet.api.common.cache.redis;
+package com.newzet.api.common.redis;
 
 public class RedisServerException extends RuntimeException {
 	public RedisServerException() {

@@ -13,17 +13,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.newzet.api.common.cache.redis.RedisUtil;
 import com.newzet.api.common.objectMapper.OptionalObjectMapper;
+import com.newzet.api.common.redis.RedisStringUtil;
 import com.newzet.api.config.RedisTestContainerConfig;
 
 @DataRedisTest
-@Import({ObjectMapper.class, OptionalObjectMapper.class, RedisUtil.class})
+@Import({ObjectMapper.class, OptionalObjectMapper.class, RedisStringUtil.class})
 @ExtendWith(RedisTestContainerConfig.class)
-class RedisUtilTest {
+class RedisStringUtilTest {
 
 	@Autowired
-	private RedisUtil redisUtil;
+	private RedisStringUtil redisStringUtil;
 
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
@@ -40,13 +40,13 @@ class RedisUtilTest {
 		String value = "testValue";
 		long ttl = 60000L;
 
-		assertFalse(redisUtil.get(key, String.class).isPresent());
+		assertFalse(redisStringUtil.get(key, String.class).isPresent());
 
 		//When
-		redisUtil.set(key, value, ttl);
+		redisStringUtil.set(key, value, ttl);
 
 		//Then
-		assertTrue(redisUtil.get(key, String.class).isPresent());
+		assertTrue(redisStringUtil.get(key, String.class).isPresent());
 	}
 
 	@Test
@@ -56,15 +56,15 @@ class RedisUtilTest {
 		String value = "testValue";
 		long ttl = 1000L;
 
-		redisUtil.set(key, value, ttl);
-		assertTrue(redisUtil.get(key, String.class).isPresent());
+		redisStringUtil.set(key, value, ttl);
+		assertTrue(redisStringUtil.get(key, String.class).isPresent());
 
 		//When
-		redisUtil.set(key, value, 3000L);
+		redisStringUtil.set(key, value, 3000L);
 
 		// Then
 		Thread.sleep(1000L);
-		assertTrue(redisUtil.get(key, String.class).isPresent());
+		assertTrue(redisStringUtil.get(key, String.class).isPresent());
 	}
 
 	@Test
@@ -75,7 +75,7 @@ class RedisUtilTest {
 		long ttl = 60000L;
 
 		//When
-		Optional<String> returnValue = redisUtil.get(key, String.class);
+		Optional<String> returnValue = redisStringUtil.get(key, String.class);
 
 		//Then
 		assertEquals(Optional.empty(), returnValue);
@@ -89,8 +89,8 @@ class RedisUtilTest {
 		long ttl = 3000L;
 
 		//When
-		redisUtil.set(key, value, ttl);
-		Optional<String> returnValue = redisUtil.get(key, String.class);
+		redisStringUtil.set(key, value, ttl);
+		Optional<String> returnValue = redisStringUtil.get(key, String.class);
 
 		//Then
 		assertTrue(returnValue.isPresent());

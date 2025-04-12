@@ -1,4 +1,4 @@
-package com.newzet.api.common.cache.redis;
+package com.newzet.api.common.redis;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.newzet.api.common.cache.CacheUtil;
+import com.newzet.api.common.mutex.MutexUtil;
 import com.newzet.api.common.objectMapper.OptionalObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RedisUtil implements CacheUtil {
+public class RedisStringUtil implements CacheUtil, MutexUtil {
 	private static final TimeUnit TIME_UNIT = TimeUnit.MILLISECONDS;
 
 	private final RedisTemplate<String, String> redisTemplate;
@@ -42,5 +43,17 @@ public class RedisUtil implements CacheUtil {
 			log.error("[RedisUtil]: Redis 값 저장 실패, key: {}, error: {}", key, e.getMessage());
 			throw new RedisServerException();
 		}
+	}
+
+	@Override
+	public boolean setMutex(String key, String value, long ttl) {
+		Boolean result = redisTemplate.opsForValue()
+			.setIfAbsent(key, value, ttl, TIME_UNIT);
+		return Boolean.TRUE.equals(result);
+	}
+
+	@Override
+	public void delete(String key) {
+		redisTemplate.delete(key);
 	}
 }

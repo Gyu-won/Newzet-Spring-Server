@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import com.newzet.api.common.cache.local.LocalCacheUtil;
-import com.newzet.api.common.cache.redis.RedisServerException;
-import com.newzet.api.common.cache.redis.RedisUtil;
+import com.newzet.api.common.redis.RedisServerException;
+import com.newzet.api.common.redis.RedisStringUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class HybridCacheUtil implements CacheUtil {
-	private final RedisUtil redisUtil;
+	private final RedisStringUtil redisStringUtil;
 	private final LocalCacheUtil localCacheUtil;
 
 	@Override
 	public <T> Optional<T> get(String key, Class<T> classType) {
 		try {
-			return redisUtil.get(key, classType);
+			return redisStringUtil.get(key, classType);
 		} catch (RedisServerException e) {
 			return localCacheUtil.get(key, classType);
 		}
@@ -32,7 +32,7 @@ public class HybridCacheUtil implements CacheUtil {
 	@Override
 	public <T> void set(String key, T object, long ttl) {
 		try {
-			redisUtil.set(key, object, ttl);
+			redisStringUtil.set(key, object, ttl);
 		} catch (RedisServerException e) {
 			localCacheUtil.set(key, object, ttl);
 		}

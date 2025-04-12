@@ -1,4 +1,4 @@
-package com.newzet.api.common.cache.redis;
+package com.newzet.api.common.redis;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RedisUtil implements CacheUtil, MutexUtil {
+public class RedisStringUtil implements CacheUtil, MutexUtil {
 	private static final TimeUnit TIME_UNIT = TimeUnit.MILLISECONDS;
 
 	private final RedisTemplate<String, String> redisTemplate;

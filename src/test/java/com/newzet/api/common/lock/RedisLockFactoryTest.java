@@ -12,16 +12,16 @@ import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
 import org.springframework.context.annotation.Import;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.newzet.api.common.cache.redis.RedisUtil;
 import com.newzet.api.common.lock.exception.RedisLockAcquisitionException;
 import com.newzet.api.common.lock.redis.RedisLock;
 import com.newzet.api.common.lock.redis.RedisLockFactory;
 import com.newzet.api.common.objectMapper.OptionalObjectMapper;
+import com.newzet.api.common.redis.RedisStringUtil;
 import com.newzet.api.config.RedisTestContainerConfig;
 import com.newzet.api.config.RedissonConfig;
 
 @DataRedisTest
-@Import({ObjectMapper.class, OptionalObjectMapper.class, RedisUtil.class, RedisLockFactory.class,
+@Import({ObjectMapper.class, OptionalObjectMapper.class, RedisStringUtil.class, RedisLockFactory.class,
 	RedissonConfig.class})
 @ExtendWith(RedisTestContainerConfig.class)
 class RedisLockFactoryTest {

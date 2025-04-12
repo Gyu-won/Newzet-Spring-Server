@@ -12,13 +12,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.newzet.api.common.cache.local.LocalCacheUtil;
-import com.newzet.api.common.cache.redis.RedisServerException;
-import com.newzet.api.common.cache.redis.RedisUtil;
+import com.newzet.api.common.redis.RedisServerException;
+import com.newzet.api.common.redis.RedisStringUtil;
 
 @ExtendWith(MockitoExtension.class)
 public class HybridCacheUtilTest {
 	@Mock
-	RedisUtil redisUtil;
+	RedisStringUtil redisUtil;
 
 	@Mock
 	LocalCacheUtil localCacheUtil;
